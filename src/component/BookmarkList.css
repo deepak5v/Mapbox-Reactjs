@@ -1,0 +1,55 @@
+.bookmarks-list {
+  margin-top: 8px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.bookmark-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+  gap: 4px;
+}
+
+.bookmark-name {
+  flex: 1;
+  text-align: left;
+  padding: 4px 8px;
+  font-size: 11px;
+  background: none;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bookmark-name:hover {
+  background: #f5f5f5;
+}
+
+.delete-bookmark {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  background: #ff5252;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.delete-bookmark:hover {
+  background: #ff1744;
+}
+
+.no-bookmarks {
+  text-align: center;
+  color: #999;
+  font-size: 11px;
+  padding: 8px;
+}

@@ -1,0 +1,565 @@
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.map-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+}
+
+.map-ui {
+  position: absolute;
+  top: 60px;
+  left: 15px;
+  z-index: 10;
+  background: white;
+  padding: 8px;
+  border-radius: 4px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+  width: 220px;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.map-ui.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Update search container styling */
+.search-container {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+  align-items: center;
+  width: 100%;
+}
+
+.search-input-container {
+  position: relative;
+  flex: 1; /* This will make it take remaining space */
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 11px;
+  height: 26px;
+  margin-bottom: 0;
+}
+
+.suggestions-container {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin-top: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: #90a4ae #f5f5f5;
+}
+
+/* Webkit scrollbar styling */
+.suggestions-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.suggestions-container::-webkit-scrollbar-track {
+  background: #f5f5f5;
+  border-radius: 3px;
+}
+
+.suggestions-container::-webkit-scrollbar-thumb {
+  background-color: #90a4ae;
+  border-radius: 3px;
+}
+
+.suggestion-item {
+  padding: 8px 12px;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.suggestion-item.selected {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.suggestion-item:hover {
+  background-color: #f5f5f5;
+}
+
+.suggestion-item.selected:hover {
+  background-color: #e3f2fd;
+}
+
+.suggestion-item span {
+  font-size: 14px;
+}
+
+/* Update search button to have fixed width */
+.search-button {
+  min-width: 32px;
+  padding: 4px;
+  height: 26px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0; /* Prevents button from shrinking */
+}
+
+.route-container {
+  margin-bottom: 8px;
+  gap: 6px;
+}
+
+.route-input {
+  width: 100%;
+  padding: 4px 8px;
+  margin-bottom: 6px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 11px;
+  height: 26px;
+}
+
+.route-button,
+.clear-button,
+.traffic-button {
+  width: 100%;
+  padding: 4px 8px;
+  height: 26px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.route-button:hover {
+  background: #45a049;
+}
+
+.toggle-btn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  z-index: 11;
+  background: white;
+  border: none;
+  padding: 4px;
+  height: 30px;
+  width: 30px;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.toggle-btn:hover {
+  background: #f5f5f5;
+  transform: scale(1.05);
+}
+
+.toggle-btn svg {
+  color: #333;
+}
+
+.map-container.adding {
+  cursor: crosshair !important;
+}
+
+.clear-container {
+  margin-top: 8px;
+  border-top: 1px solid #eee;
+  padding-top: 8px;
+}
+
+.clear-button:hover {
+  background: #ff1744;
+}
+
+.traffic-button {
+  margin-top: 8px;
+  background: #2196F3;
+}
+
+.traffic-button:hover {
+  background: #1976D2;
+}
+
+/* Adjust placeholder text size */
+.search-input::placeholder,
+.route-input::placeholder {
+  font-size: 11px;
+}
+
+.route-info-popup {
+  padding: 4px;
+  font-size: 11px;
+  min-width: 150px;
+}
+
+.route-info-popup h4 {
+  margin: 0 0 6px 0;
+  font-size: 12px;
+  color: #1976d2;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 4px;
+}
+
+.route-info-popup div {
+  margin: 3px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.mapboxgl-popup {
+  transform: translate(-50%, -100%);
+}
+
+.mapboxgl-popup-content {
+  padding: 8px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.bookmark-container {
+  margin-top: 8px;
+  display: flex;
+  margin-bottom: 10px;
+  align-items: center;
+  width: 100%;
+}
+
+.bookmark-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+}
+
+.bookmark-input {
+  flex: 1;
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 11px;
+  height: 26px;
+  margin: 0;
+}
+
+.location-btn {
+  background: none;
+  border: none;
+  padding: 2px;
+  margin: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 26px;
+  border: 1px solid black;
+  border-radius: 5px;
+  width: 25px;
+  height: 25px;
+}
+
+.location-btn img {
+  display: block;
+}
+
+.bookmark-button {
+  min-width: 32px;
+  padding: 4px 8px;
+  height: 26px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bookmarks-list {
+  border-top: 1px solid #eee;
+  padding-top: 8px;
+  font-size: 11px;
+}
+
+.bookmark-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9f9f9;
+  padding: 3px 6px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin-bottom: 6px;
+}
+
+.delete-button {
+  background: #ff5252;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 2px 4px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.delete-button:hover {
+  background: #e53935;
+}
+
+.coords-follow {
+  position: fixed;
+  z-index: 999;
+  background: #1e1e1e;
+  color: #fff;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 10px;
+  pointer-events: none;
+  transform: translate(6px, 6px); /* reduced offset */
+  white-space: nowrap;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  opacity: 0.95;
+}
+
+.style-modal-toggle {
+  position: fixed;
+  top: 15px;
+  right: 50px;
+  z-index: 1001;
+  background: #fff;
+  border-radius: 20px;
+  width: 36px;
+  height: 36px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.13);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+  border: 1px solid #eee;
+  transition: background 0.2s;
+}
+.style-modal-toggle:hover {
+  background: #f0f0f0;
+}
+
+.mapbox-controls-modal {
+  position: fixed;
+  top: 55px;
+  right: 40px;
+  z-index: 1001;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+  padding: 18px 20px 12px 20px;
+  min-width: 220px;
+  font-size: 13px;
+  animation: fadeIn 0.2s;
+}
+
+.style-buttons, .preset-buttons {
+  margin-bottom: 10px;
+}
+.style-buttons span, .preset-buttons span {
+  font-weight: 600;
+  margin-right: 8px;
+}
+.mapbox-controls-modal button {
+  margin: 0 4px 6px 0;
+  padding: 4px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  background: #f7f7f7;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.mapbox-controls-modal button:hover {
+  background: #e0e0e0;
+}
+
+.map-style-bar {
+  position: absolute;
+  top: 18px;
+  right: 50px;
+  z-index: 1002;
+  display: flex;
+  flex-direction: row; 
+  gap: 12px;
+}
+
+.style-btn {
+  background: #fff;
+  border: 2px solid #eee;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.13);
+  cursor: pointer;
+  transition: border 0.2s, box-shadow 0.2s;
+  padding: 0;
+  overflow: hidden; /* Ensures image is clipped to circle */
+}
+
+.style-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   /* Fills the button, cropping if needed */
+  border-radius: 50%; /* Ensures image is round */
+  display: block;
+  pointer-events: none;
+}
+
+.style-btn.active, .style-btn:hover {
+  border: 3px solid #0848ad;
+  box-shadow: 0 4px 12px rgba(59,130,246,0.13);
+}
+
+.start-driving{
+  margin-top: 8px;
+  width: 100%;
+  padding: 4px 8px;
+  height: 26px;
+  background: #1d59db;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+/* Add this to your mapbox.css */
+.car-marker-container {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.car-marker-container img {
+  width: 30px;
+  height: 30px;
+  display: block;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Control buttons container */
+.driving-controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.speed-toggle-btn,
+.pause-resume-btn {
+  flex: 1;
+  padding: 4px 8px;
+  height: 26px;
+  border: none;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+  color: white;
+}
+
+/* Speed toggle button specific styles */
+.speed-toggle-btn {
+  background: #4CAF50;
+}
+
+.speed-toggle-btn:hover {
+  background: #43A047;
+}
+
+/* Pause/Resume button specific styles */
+.pause-resume-btn {
+  background: #FF9800;
+}
+
+.pause-resume-btn:hover {
+  background: #F57C00;
+}
+
+/* When paused, change color to indicate stopped state */
+.pause-resume-btn[data-paused="true"] {
+  background: #2196F3;
+}
+
+.pause-resume-btn[data-paused="true"]:hover {
+  background: #1976D2;
+}
